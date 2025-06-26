@@ -29,7 +29,18 @@ const ComparePlans: React.FC=()=>{
         <Nav />
         <GrammarlyStartSection title={section.title} text={section.text} content={section.content} src={section.src} bgColor={section.bgColor} color={section.color}/>
         <div className={styles.comapre_plans__container}>
-            {PlansList.map(plan=><PlansContainer plan={plan.plan} planSelected='none' header={plan.header} planName={plan.planName} desc={plan.desc} btnName={plan.btnName} planFunctions={plan.planFunctions}/>)}
+            {PlansList.map((plan, idx) => (
+                <PlansContainer
+                    key={idx}
+                    plan={plan.plan}
+                    planSelected='none'
+                    header={plan.header}
+                    planName={plan.planName}
+                    desc={plan.desc}
+                    btnName={plan.btnName}
+                    planFunctions={plan.planFunctions}
+                />
+            ))}
         </div>
         <Footer />
     </div>

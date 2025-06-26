@@ -3,6 +3,7 @@ import styles from './forwork.module.scss'
 import Nav from "../components/Nav"
 import Footer from '../components/Footer'
 import GrammarlyStartSection from '../components/grammarlyStartSection'
+import Image from 'next/image'
 
 interface SectionType {
     text: string
@@ -40,7 +41,9 @@ const ForWork: React.FC=()=>{
         <h3 className={styles.forwork__work__heading}>Grammarly Works Where You Do</h3>
         <p className={styles.forwork__work__info}>Put your best foot forward in every message and document you write.</p>
         <div className={styles.forwork__icon}>
-            {Imgs.map(img=><img src={img} alt='img icon' loading='lazy'/>)}
+            {Imgs.map((img, idx) => (
+                <Image key={idx} src={img} alt='img icon' width={40} height={40} loading='lazy' />
+            ))}
         </div>
         <Footer />
     </div>

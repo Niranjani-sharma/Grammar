@@ -1,5 +1,5 @@
 import styles from './sidebardocument.module.scss'
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState, useCallback} from 'react'
 import ReactToPrint from 'react-to-print';
 import axios from 'axios'
 import { HandleAddDocument } from '@/app/helpers/AddDocument'
@@ -14,29 +14,30 @@ interface SideBarDocumentSectionProps {
 
 const SideBarDocumentSection:React.FC<SideBarDocumentSectionProps>=({text,icon,textRef,title,_id})=>{
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const handleFileUpload = async (file: File) => {
+    const handleFileUpload = useCallback(async (file: File) => {
       const formData = new FormData();
       console.log(file)
       formData.append('file', file);
   
       axios.post('/api/upload',formData,{headers:{'Content-Type': 'multipart/form-data'}}).then((res)=>console.log(res))
-    };
-    useEffect(()=>{
-        if (selectedFile){
+    }, []);
+
+    const handleUpload = useCallback(() => {
+      if (selectedFile) {
+        handleFileUpload(selectedFile);
+      }
+    }, [selectedFile, handleFileUpload]);
+
+    useEffect(() => {
+        if (selectedFile) {
             handleUpload()
         }
-    },[selectedFile])
+    }, [selectedFile, handleUpload]);
   
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files && event.target.files[0];
       if (file) {
         setSelectedFile(file);
-      }
-    };
-  
-    const handleUpload = () => {
-      if (selectedFile) {
-        handleFileUpload(selectedFile);
       }
     };
 

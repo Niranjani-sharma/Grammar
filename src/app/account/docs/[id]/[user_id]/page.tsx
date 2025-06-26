@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 
 import styles from "./docs.module.scss";
 
@@ -63,20 +63,7 @@ import BestVersion from "./components/BestVersion";
 
 import SuggestionPanel from "./components/SuggestionPanel";
 
-interface DocsProps {
-  params: {
-    id: string;
-    user_id: string;
-  };
-}
-
-const stripHtml = (html: string) => {
-  const tmp = document.createElement('div');
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || '';
-};
-
-const Doc: React.FC<DocsProps> = ({ params }) => {
+export default function Page({ params }: { params: { id: string; user_id: string } }) {
   const { isLogged } = useAuth();
 
   const { document, error, isLoading, setDocument } = useDocument(
@@ -334,7 +321,7 @@ const Doc: React.FC<DocsProps> = ({ params }) => {
     }
   };
 
-  const handleChange = async (newText: string) => {
+  const handleChange = useCallback(async (newText: string) => {
     setText(newText);
     
     // Only calculate metrics if there's actual text
@@ -367,13 +354,13 @@ const Doc: React.FC<DocsProps> = ({ params }) => {
       }, 1000);
       return () => clearTimeout(timeoutId);
     }
-  };
+  }, [document, title]);
 
   useEffect(() => {
     if (document?.text) {
       handleChange(document.text);
     }
-  }, [document]);
+  }, [document, handleChange]);
 
   const handleDoubleClick = (): void => {
     const selection = window.getSelection();
@@ -749,6 +736,4 @@ const Doc: React.FC<DocsProps> = ({ params }) => {
         </DocumentContext.Provider>
       </div>
     );
-};
-
-export default Doc;
+}

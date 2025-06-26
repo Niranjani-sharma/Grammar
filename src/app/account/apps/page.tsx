@@ -23,15 +23,15 @@ const Apps = () => {
             <div className={styles.apps__content}>
                 <h1 style={{fontWeight:'bold'}}>Apps</h1>
                 <div>
-                {AppsList.map(app=>
-                    <div className={styles.apps__content__container}>
+                {AppsList.map((app, idx) => (
+                    <div className={styles.apps__content__container} key={app.id || idx}>
                         <div>
                             <h3 className={styles.apps__content__container__title}>{app.title}</h3>
                             <p>{app.desc}</p>
                         </div>
                         <button className={styles.apps__content__container__btn}>Coming Soon!</button>
                     </div>
-                )}
+                ))}
                 </div>
             </div>
         </div>

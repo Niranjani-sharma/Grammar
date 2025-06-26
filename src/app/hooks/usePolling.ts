@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { PollingData } from '../types/data';
 
@@ -6,7 +6,7 @@ const usePolling = () => {
   const [data, setData] = useState<PollingData | null>(null);
   const [errorPoll, setErrorPoll] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get('/api/user');
       if (response.data.error) {
@@ -20,7 +20,7 @@ const usePolling = () => {
       setErrorPoll(errorMessage);
       console.error('Polling error:', err);
     }
-  };
+  }, []);
 
   const mutate = () => {
     fetchData();
@@ -30,7 +30,7 @@ const usePolling = () => {
     fetchData();
     const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchData]);
 
   return { data, errorPoll, mutate };
 };

@@ -24,7 +24,16 @@ const Settings: React.FC = () => {
     if (isLogged && data){
         return <div className={styles.settings}>
             <Sidebar email={data?.email} />
-            {isModal && (SettingsList.filter(content=>content.title==modal).map(modal=><SettingsModal email={data.email} setIsModal={setIsModal} data={modal}/>))}
+            {SettingsList.map((setting, idx) => (
+                <SettingsModal
+                    key={idx}
+                    {...setting}
+                    modal={modal}
+                    setModal={setModal}
+                    isModal={isModal}
+                    setIsModal={setIsModal}
+                />
+            ))}
             <div className={styles.settings__profile}>
                 <h2 className={styles.settings__profile__title}>Account Settings</h2>
                 <hr />
